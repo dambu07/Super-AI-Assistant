@@ -21,13 +21,13 @@ st.set_page_config(
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="auto",
-    menu_items={"About": about(), "Get Help":"https://www.linkedin.com/in/aasher-kamal-a227a124b/"},
+    menu_items={"About": about(), "Get Help":"https://www.x.com/dambu07/"},
 )
 
 ###--- Title ---###
 st.markdown("""
     <h1 style='text-align: center;'>
-        <span style='color: #F81F6F;'>Super</span> 
+        <span style='color: #F81F6F;'>Ombre</span> 
         <span style='color: #f5f8fc;'>AI Assistant</span>
     </h1>
 """, unsafe_allow_html=True)
