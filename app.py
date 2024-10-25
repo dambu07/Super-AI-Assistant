@@ -401,21 +401,13 @@ def process_user_input(message_container, trasncribed_text):
 
 
 
-##--- API KEYS ---##
-with st.sidebar:
-    st.logo("logo.png")
-    api_cols = st.columns(2)
-    with api_cols[0]:
-        with st.popover("🔐 Groq", use_container_width=True):
-            groq_api_key = st.text_input("Click [here](https://console.groq.com/keys) to get your Groq API key", type="password")
-    
-    with api_cols[1]:
-        with st.popover("🔐 Google", use_container_width=True):
-            google_api_key = st.text_input("Click [here](https://aistudio.google.com/app/apikey) to get your Google API key", type="password")
+# Load API keys from secrets.toml
+groq_api_key = st.secrets["API_KEYS"]["groq"]
+google_api_key = st.secrets["API_KEYS"]["google"]
  
-##--- API KEY CHECK ---##
-if not validate_api_keys(groq_api_key, google_api_key):
-    st.info("Please Add a valid API Key in the sidebar to proceed.")
+# Ensure both API keys are available before proceeding
+if not (groq_api_key and google_api_key):
+    st.error("API keys are missing! Please add them to secrets.toml.")
 
 ####--- SIDEBAR AFTER API KEYS VALIDATION ---###
 else:
@@ -453,7 +445,7 @@ else:
                     st.file_uploader(
                         "Upload an image, audio or a video", 
                         type=["png", "jpg", "jpeg", "wav", "mp3", "mp4"], 
-                        accept_multiple_files=False,
+                        accept_multiple_files=True,
                         key="uploaded_file",
                         on_change=add_media_files_to_messages,
                     )
@@ -468,7 +460,7 @@ else:
                         )
             st.divider()
             tip = "If you upload a PDF or DOCX file, it will be sent to LLM."
-            pdf_upload = st.file_uploader("Upload a PDF or Docx file", type=["pdf", "docx"], key="pdf_docx_uploaded", on_change=add_pdf_docx_file_to_messages, help=tip)
+            pdf_upload = st.file_uploader("Upload a PDF or Docx file", type=["pdf", "docx", "txt"], key="pdf_docx_uploaded", on_change=add_pdf_docx_file_to_messages, help=tip)
         
         ###---- Groq Models Sidebar Customization----###
         else:
