@@ -596,3 +596,14 @@ else:
     else:
         process_user_input(message_container, st.session_state.transcribed_text)
         st.session_state.speech_file_added = False
+
+###--- Hide Streamlit footer---###
+    hide_st_style = """
+        <style>
+       MainMenu {visibility: hidden;}
+       footer {visibility: hidden;}
+       header {visibility: hidden;}
+       </style>
+       """
+    st.markdown(hide_st_style, unsafe_allow_html=True)
+#--------------------------------------------------------------------
