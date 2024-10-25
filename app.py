@@ -575,7 +575,7 @@ else:
                 with message_container.chat_message(msg["role"], avatar=avatar):
                     st.markdown(msg['content'])
 
- ###---- Summarizer model------###
+     ###---- Summarizer model------###
     if model_type == "groq" and groq_llm_type == "Summarizer":
         if st.session_state.summarize:
             with message_container.chat_message("assistant", avatar="assistant.png"):
@@ -592,12 +592,12 @@ else:
                     except Exception as e:
                         st.error(f"An error occurred: {e}", icon="❌")
 
-###----- User Question -----###
+      ###----- User Question -----###
     else:
         process_user_input(message_container, st.session_state.transcribed_text)
         st.session_state.speech_file_added = False
 
-###--- Hide Streamlit footer---###
+      ###--- Hide Streamlit footer---###
     hide_st_style = """
         <style>
        MainMenu {visibility: hidden;}
@@ -606,4 +606,4 @@ else:
        </style>
        """
     st.markdown(hide_st_style, unsafe_allow_html=True)
-#--------------------------------------------------------------------
+   #--------------------------------------------------------------------
