@@ -214,42 +214,48 @@ def add_pdf_docx_file_to_messages():
 
 ##--- Function for adding media files to session_state messages ---###
 def add_media_files_to_messages():
-    if st.session_state.uploaded_file:
-        file_type = st.session_state.uploaded_file.type
-        file_content = st.session_state.uploaded_file.getvalue()
-        
-        encoded_file = base64.b64encode(file_content).decode()
-        content_type = None
-        
-        if file_type.startswith("image"):
-            content_type = "image_url"
-            data_url = f"data:{file_type};base64,{encoded_file}"
+    # Ensure 'uploaded_file' is handled as a list (even for single upload)
+    uploaded_files = st.session_state.get("uploaded_file", [])
+    
+    if not isinstance(uploaded_files, list):
+        uploaded_files = [uploaded_files]  # Wrap in a list if it's a single file
 
-        elif file_type == "video/mp4":
-            content_type = "video_file"
-            unique_id = f"temp_{random.randint(1000, 9999)}"
-            data_url = f"data:{file_type};base64,{encoded_file}"
+    for uploaded_file in uploaded_files:
+        if uploaded_file:
+            file_type = uploaded_file.type
+            file_content = uploaded_file.getvalue()
+            encoded_file = base64.b64encode(file_content).decode()
+            content_type = None
 
-        elif file_type.startswith("audio"):
-            content_type = "audio_file"
-            unique_id = f"temp_{random.randint(1000, 9999)}"
-            data_url = f"data:{file_type};base64,{encoded_file}"
+            if file_type.startswith("image"):
+                content_type = "image_url"
+                data_url = f"data:{file_type};base64,{encoded_file}"
 
-        # Only append if the content type is recognized
-        if content_type:
-            message_content = {"type": content_type}
-            if content_type == "image_url":
-                message_content["image_url"] = {"url": data_url}
-            else:
-                message_content[content_type] = data_url
-                message_content["unique_name"] = unique_id
+            elif file_type == "video/mp4":
+                content_type = "video_file"
+                unique_id = f"temp_{random.randint(1000, 9999)}"
+                data_url = f"data:{file_type};base64,{encoded_file}"
 
-            st.session_state.messages.append(
-                {
-                    "role": "user", 
-                    "content": [message_content]
-                }
-            )
+            elif file_type.startswith("audio"):
+                content_type = "audio_file"
+                unique_id = f"temp_{random.randint(1000, 9999)}"
+                data_url = f"data:{file_type};base64,{encoded_file}"
+
+            # Only append if the content type is recognized
+            if content_type:
+                message_content = {"type": content_type}
+                if content_type == "image_url":
+                    message_content["image_url"] = {"url": data_url}
+                else:
+                    message_content[content_type] = data_url
+                    message_content["unique_name"] = unique_id
+
+                st.session_state.messages.append(
+                    {
+                        "role": "user", 
+                        "content": [message_content]
+                    }
+                )
 
 ###--- FUNCTION TO ADD CAMERA IMAGE TO MESSAGES ---##
 def add_camera_img_to_messages():
